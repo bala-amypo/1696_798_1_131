@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Table(name = "zones")
@@ -11,33 +11,18 @@ public class Zone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String zoneName;
 
-    private boolean active = true;
+    @OneToMany(mappedBy = "zone")
+    private List<DemandReading> readings;
 
-    // getters and setters
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getZoneName() { return zoneName; }
+    public void setZoneName(String zoneName) { this.zoneName = zoneName; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    public List<DemandReading> getReadings() { return readings; }
+    public void setReadings(List<DemandReading> readings) { this.readings = readings; }
 }
