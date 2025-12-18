@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,35 +14,32 @@ import com.example.demo.service.DemandReadingService;
 public class DemandReadingServiceImpl implements DemandReadingService {
 
     @Autowired
-    private DemandReadingRepository repo;
+    private DemandReadingRepository repository;
 
     @Override
     public DemandReading save(DemandReading reading) {
-        return repo.save(reading);
+        return repository.save(reading);
     }
 
     @Override
-    public DemandReading getById(Long id) {
-        return repo.findById(id).orElse(null);
+    public Optional<DemandReading> getById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
-    public DemandReading getByZone(Long zoneId) {
-        return repo.findTopByZoneIdOrderByRecordedAtDesc(zoneId);
+    public List<DemandReading> getByZone(Long zoneId) {
+        return repository.findByZoneId(zoneId);
     }
 
     @Override
     public DemandReading getLatest(Long zoneId) {
-        return repo.findTopByZoneIdOrderByRecordedAtDesc(zoneId);
+        return repository
+                .findTopByZoneIdOrderByTimestampDesc(zoneId)
+                .orElse(null);
     }
 
     @Override
-    public List<DemandReading> getRecent(Long zoneId, int count) {
-        return repo.findRecentReadings(zoneId, count);
-    }
-
-    @Override
-    public Double getTotalLatestDemand() {
-        return repo.getTotalLatestDemand();
+    public List<DemandReading> getRecent(Long zoneId, int limit) {
+        return repository.findRecentByZone(zoneId, limit);
     }
 }
