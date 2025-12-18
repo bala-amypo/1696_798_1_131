@@ -17,17 +17,17 @@ public class ZoneRestorationRecordServiceImpl implements ZoneRestorationRecordSe
     private ZoneRestorationRecordRepository repo;
 
     @Override
-    public ZoneRestorationRecord restoreZone(ZoneRestorationRecord record) {
+    public ZoneRestorationRecord save(ZoneRestorationRecord record) {
         return repo.save(record);
     }
 
     @Override
-    public Optional<ZoneRestorationRecord> getRecordById(Long id) {
+    public Optional<ZoneRestorationRecord> getById(Long id) {
         return repo.findById(id);
     }
 
     @Override
-    public List<ZoneRestorationRecord> getRecordsForZone(Long zoneId) {
+    public List<ZoneRestorationRecord> getByZone(Long zoneId) {
         return repo.findByZoneId(zoneId);
     }
 }
