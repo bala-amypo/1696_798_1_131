@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +15,32 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     private DemandReadingRepository repo;
 
     @Override
-    public DemandReading createReading(DemandReading reading) {
+    public DemandReading save(DemandReading reading) {
         return repo.save(reading);
     }
 
     @Override
-    public List<DemandReading> getReadingsForZone(Long zoneId) {
-        return repo.findByZoneId(zoneId);
+    public DemandReading getById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
     @Override
-    public DemandReading getLatestReading(Long zoneId) {
+    public DemandReading getByZone(Long zoneId) {
         return repo.findTopByZoneIdOrderByRecordedAtDesc(zoneId);
     }
 
     @Override
-    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
-        return repo.findRecentReadings(zoneId, limit);
+    public DemandReading getLatest(Long zoneId) {
+        return repo.findTopByZoneIdOrderByRecordedAtDesc(zoneId);
+    }
+
+    @Override
+    public List<DemandReading> getRecent(Long zoneId, int count) {
+        return repo.findRecentReadings(zoneId, count);
+    }
+
+    @Override
+    public Double getTotalLatestDemand() {
+        return repo.getTotalLatestDemand();
     }
 }
