@@ -6,13 +6,11 @@ import com.example.demo.entity.Zone;
 
 public interface ZoneService {
 
-    Zone createZone(Zone zone);
+    Zone save(Zone zone);
 
-    Zone updateZone(Long id, Zone zone);
+    Optional<Zone> getById(Long id);
 
-    Optional<Zone> getZoneById(Long id);
+    List<Zone> getAll();
 
-    List<Zone> getAllZones();
-
-    String deactivateZone(Long id);
+    void deactivate(Long id);
 }
