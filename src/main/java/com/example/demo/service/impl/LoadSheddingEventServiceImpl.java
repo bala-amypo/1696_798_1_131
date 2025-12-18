@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
-import com.example.demo.service.LoadSheddingService;
+import com.example.demo.service.LoadSheddingEventService;
 
 @Service
-public class LoadSheddingServiceImpl implements LoadSheddingService {
+public class LoadSheddingEventServiceImpl implements LoadSheddingEventService {
 
     @Autowired
     private SupplyForecastRepository forecastRepo;
@@ -24,10 +24,10 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     private ZoneRepository zoneRepo;
 
     @Autowired
-    private LoadSheddingRepository eventRepo;
+    private LoadSheddingEventRepository eventRepo;
 
     @Override
-    public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
+    public LoadSheddingEvent triggerLoadSheddingEvent(Long forecastId) {
 
         SupplyForecast forecast = forecastRepo.findById(forecastId).orElseThrow();
 
