@@ -1,11 +1,23 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name = "zone_restoration_records")
 public class ZoneRestorationRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "zone_id", nullable = false)
     private Long zoneId;
+
+    @Column(name = "restoration_details")
     private String restorationDetails;
+
+    @Column(name = "restored_at")
     private Timestamp restoredAt;
 
     // Constructors
