@@ -1,14 +1,18 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Zone;
 import java.util.List;
 import java.util.Optional;
-import com.example.demo.entity.Zone;
 
 public interface ZoneService {
 
-    Zone save(Zone zone);
-    Zone update(Long id, Zone zone);
-    Optional<Zone> getById(Long id);
-    List<Zone> getAll();
-    String deactivate(Long id);
+    Zone createZone(Zone zone);
+
+    Zone updateZone(Long id, Zone zone);
+
+    Optional<Zone> getZoneById(Long id);
+
+    List<Zone> getAllZones();
+
+    String deactivateZone(Long id);
 }
