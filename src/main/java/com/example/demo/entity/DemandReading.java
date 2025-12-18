@@ -13,35 +13,29 @@ public class DemandReading {
 
     private Double demandValue;
 
-    private LocalDateTime readingTime;
+    private LocalDateTime timestamp;   // used for ordering latest readings
 
-    // Example relation (if any)
-    // @ManyToOne
-    // private Zone zone;
+    private Long zoneId;               // zone reference
 
-    // getters and setters
+    // Constructors
+    public DemandReading() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getDemandValue() {
-        return demandValue;
-    }
-
-    public void setDemandValue(Double demandValue) {
+    public DemandReading(Double demandValue, LocalDateTime timestamp, Long zoneId) {
         this.demandValue = demandValue;
+        this.timestamp = timestamp;
+        this.zoneId = zoneId;
     }
 
-    public LocalDateTime getReadingTime() {
-        return readingTime;
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setReadingTime(LocalDateTime readingTime) {
-        this.readingTime = readingTime;
-    }
+    public Double getDemandValue() { return demandValue; }
+    public void setDemandValue(Double demandValue) { this.demandValue = demandValue; }
+
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+
+    public Long getZoneId() { return zoneId; }
+    public void setZoneId(Long zoneId) { this.zoneId = zoneId; }
 }
