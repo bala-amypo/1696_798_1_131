@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.ZoneRestorationRecord;
 
 @Repository
-public interface ZoneRestorationRepository extends JpaRepository<ZoneRestorationRecord, Long> {
+public interface ZoneRestorationRecordRepository extends JpaRepository<ZoneRestorationRecord, Long> {
 
     List<ZoneRestorationRecord> findByZoneId(Long zoneId);
 }
