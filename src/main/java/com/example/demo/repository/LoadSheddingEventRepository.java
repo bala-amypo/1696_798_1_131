@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.LoadSheddingEvent;
 
 @Repository
-public interface LoadSheddingEventRepo extends JpaRepository<LoadSheddingEvent, Long> {
+public interface LoadSheddingEventRepository extends JpaRepository<LoadSheddingEvent, Long> {
 
     List<LoadSheddingEvent> findByZoneId(Long zoneId);
 }

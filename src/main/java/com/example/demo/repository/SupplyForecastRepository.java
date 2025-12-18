@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.SupplyForecast;
 
 @Repository
-public interface SupplyForecastRepo extends JpaRepository<SupplyForecast, Long> {
+public interface SupplyForecastRepository extends JpaRepository<SupplyForecast, Long> {
 
     SupplyForecast findTopByOrderByGeneratedAtDesc();
 }
