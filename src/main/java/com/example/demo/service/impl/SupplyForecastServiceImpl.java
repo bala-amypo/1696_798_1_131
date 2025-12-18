@@ -17,24 +17,28 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
     private SupplyForecastRepository repository;
 
     @Override
-    public SupplyForecast save(SupplyForecast forecast) {
+    public SupplyForecast createForecast(SupplyForecast forecast) {
         return repository.save(forecast);
     }
 
     @Override
-    public Optional<SupplyForecast> getById(Long id) {
+    public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
+        forecast.setId(id);
+        return repository.save(forecast);
+    }
+
+    @Override
+    public Optional<SupplyForecast> getForecastById(Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public SupplyForecast getLatest() {
-        return repository
-                .findTopByOrderByForecastTimeDesc()
-                .orElse(null);
+    public SupplyForecast getLatestForecast() {
+        return repository.findTopByOrderByForecastTimeDesc();
     }
 
     @Override
-    public List<SupplyForecast> getAll() {
+    public List<SupplyForecast> getAllForecasts() {
         return repository.findAll();
     }
 }
