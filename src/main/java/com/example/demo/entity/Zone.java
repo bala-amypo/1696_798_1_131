@@ -1,34 +1,43 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "zones")
 public class Zone {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String zoneName;
-    private int priorityLevel;
-    private int population;
-    private boolean active;
 
-    // Constructors
-    public Zone() {}
+    private String name;
 
-    public Zone(Long id, String zoneName, int priorityLevel, int population, boolean active) {
-        this.id = id;
-        this.zoneName = zoneName;
-        this.priorityLevel = priorityLevel;
-        this.population = population;
-        this.active = active;
+    private boolean active = true;
+
+    // getters and setters
+
+    public Long getId() {
+        return id;
     }
 
-    // Getters
-    public Long getId() { return id; }
-    public String getZoneName() { return zoneName; }
-    public int getPriorityLevel() { return priorityLevel; }
-    public int getPopulation() { return population; }
-    public boolean isActive() { return active; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setZoneName(String zoneName) { this.zoneName = zoneName; }
-    public void setPriorityLevel(int priorityLevel) { this.priorityLevel = priorityLevel; }
-    public void setPopulation(int population) { this.population = population; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
