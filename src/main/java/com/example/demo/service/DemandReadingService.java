@@ -1,8 +1,19 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.DemandReading;
 import java.util.List;
+import java.util.Optional;
+
+import com.example.demo.entity.DemandReading;
 
 public interface DemandReadingService {
-    List<DemandReading> getRecentReadingsByZone(Long zoneId, int count);
+
+    DemandReading save(DemandReading reading);
+
+    Optional<DemandReading> getById(Long id);
+
+    List<DemandReading> getByZone(Long zoneId);
+
+    DemandReading getLatest(Long zoneId);
+
+    List<DemandReading> getRecent(Long zoneId, int limit);
 }
