@@ -21,6 +21,10 @@ public class SupplyForecast {
 
     public SupplyForecast() {
     }
+    public void setId(Long id) {
+    this.id = id;
+}
+
 
     @PrePersist
     void onGenerate() {

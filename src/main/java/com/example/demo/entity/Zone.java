@@ -31,6 +31,10 @@ public class Zone {
 
     public Zone() {
     }
+    public void setId(Long id) {
+    this.id = id;
+}
+
 
     @PrePersist
     void onCreate() {
@@ -42,6 +46,7 @@ public class Zone {
     void onUpdate() {
         updatedAt = Instant.now();
     }
+
 
     // Getters & Setters
     public Long getId() { return id; }
