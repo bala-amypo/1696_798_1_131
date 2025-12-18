@@ -2,15 +2,16 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import com.example.demo.entity.LoadSheddingEvent;
 
-public interface LoadSheddingService {
+public interface LoadSheddingEventService {
 
-    LoadSheddingEvent triggerLoadSheddingEvent(Long forecastId);
+    LoadSheddingEvent trigger(Long forecastId);
 
-    Optional<LoadSheddingEvent> getEventById(Long id);
+    Optional<LoadSheddingEvent> getById(Long id);
 
-    List<LoadSheddingEvent> getEventsForZone(Long zoneId);
+    List<LoadSheddingEvent> getByZone(Long zoneId);
 
-    List<LoadSheddingEvent> getAllEvents();
+    List<LoadSheddingEvent> getAll();
 }
