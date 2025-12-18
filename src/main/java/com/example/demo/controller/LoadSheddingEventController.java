@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.LoadSheddingEvent;
-import com.example.demo.service.LoadSheddingService;
+import com.example.demo.service.LoadSheddingEventService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,11 +15,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/load-shedding")
-@Tag(name = "Load Shedding Controller")
-public class LoadSheddingController {
+@Tag(name = "Load Shedding Event Controller")
+public class LoadSheddingEventController {
 
     @Autowired
-    private LoadSheddingService service;
+    private LoadSheddingEventService service;
 
     @Operation(summary = "Trigger load shedding event")
     @PostMapping("/trigger/{forecastId}")
