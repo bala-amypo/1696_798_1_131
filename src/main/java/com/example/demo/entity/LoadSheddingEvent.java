@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import java.time.Instant;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 
@@ -25,8 +24,9 @@ public class LoadSheddingEvent {
     @DecimalMin("0.0")
     private double expectedDemandReductionMW;
 
-    public LoadSheddingEvent() {
-    }
+    private boolean active; // added
+
+    public LoadSheddingEvent() {}
 
     // Getters & Setters
     public Long getId() { return id; }
@@ -42,4 +42,6 @@ public class LoadSheddingEvent {
     public void setTriggeredByForecastId(Long triggeredByForecastId) { this.triggeredByForecastId = triggeredByForecastId; }
     public double getExpectedDemandReductionMW() { return expectedDemandReductionMW; }
     public void setExpectedDemandReductionMW(double expectedDemandReductionMW) { this.expectedDemandReductionMW = expectedDemandReductionMW; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; } // added
 }
