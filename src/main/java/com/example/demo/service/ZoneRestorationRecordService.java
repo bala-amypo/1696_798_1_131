@@ -6,9 +6,9 @@ import com.example.demo.entity.ZoneRestorationRecord;
 
 public interface ZoneRestorationRecordService {
 
-    ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
+    ZoneRestorationRecord save(ZoneRestorationRecord record);
 
-    Optional<ZoneRestorationRecord> getRecordById(Long id);
+    Optional<ZoneRestorationRecord> getById(Long id);
 
-    List<ZoneRestorationRecord> getRecordsForZone(Long zoneId);
+    List<ZoneRestorationRecord> getByZone(Long zoneId);
 }
