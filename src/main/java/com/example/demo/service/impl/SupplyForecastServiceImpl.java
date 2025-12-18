@@ -1,3 +1,15 @@
+package com.example.demo.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.example.demo.entity.SupplyForecast;
+import com.example.demo.repository.SupplyForecastRepository;
+import com.example.demo.service.SupplyForecastService;
+
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
@@ -22,6 +34,7 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
 
     @Override
     public SupplyForecast getLatest() {
+        // Make sure your repository has this method
         return repository.findTopByOrderByForecastTimeDesc();
     }
 
