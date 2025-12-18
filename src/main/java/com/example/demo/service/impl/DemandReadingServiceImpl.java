@@ -33,9 +33,7 @@ public class DemandReadingServiceImpl implements DemandReadingService {
 
     @Override
     public DemandReading getLatest(Long zoneId) {
-        return repository
-                .findTopByZoneIdOrderByTimestampDesc(zoneId)
-                .orElse(null);
+        return repository.findTopByZoneIdOrderByTimestampDesc(zoneId);
     }
 
     @Override
