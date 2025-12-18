@@ -1,14 +1,15 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.DemandReading;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.List;
-
+import com.example.demo.entity.DemandReading;
 public interface DemandReadingRepository extends JpaRepository<DemandReading, Long> {
 
-    @Query("SELECT d FROM DemandReading d WHERE d.zone.id = :zoneId ORDER BY d.createdAt DESC")
-    List<DemandReading> findRecentByZone(@Param("zoneId") Long zoneId, Pageable pageable);
+    // Latest reading for a zone
+    DemandReading findTopByZoneIdOrderByTimestampDesc(Long zoneId);
+
+    // All readings for a zone
+    List<DemandReading> findByZoneId(Long zoneId);
 }
