@@ -14,31 +14,27 @@ import com.example.demo.service.SupplyForecastService;
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
     @Autowired
-    private SupplyForecastRepository repo;
+    private SupplyForecastRepository repository;
 
     @Override
-    public SupplyForecast createForecast(SupplyForecast forecast) {
-        return repo.save(forecast);
+    public SupplyForecast save(SupplyForecast forecast) {
+        return repository.save(forecast);
     }
 
     @Override
-    public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
-        forecast.setId(id);
-        return repo.save(forecast);
+    public Optional<SupplyForecast> getById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
-    public Optional<SupplyForecast> getForecastById(Long id) {
-        return repo.findById(id);
+    public SupplyForecast getLatest() {
+        return repository
+                .findTopByOrderByForecastTimeDesc()
+                .orElse(null);
     }
 
     @Override
-    public SupplyForecast getLatestForecast() {
-        return repo.findTopByOrderByGeneratedAtDesc();
-    }
-
-    @Override
-    public List<SupplyForecast> getAllForecasts() {
-        return repo.findAll();
+    public List<SupplyForecast> getAll() {
+        return repository.findAll();
     }
 }
