@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.repository.ZoneRestorationRepository;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.repository.ZoneRestorationRecordRepository;
+import com.example.demo.service.ZoneRestorationRecordService;
 
 @Service
-public class ZoneRestorationServiceImpl implements ZoneRestorationService {
+public class ZoneRestorationRecordServiceImpl implements ZoneRestorationRecordService {
 
     @Autowired
-    private ZoneRestorationRepository repo;
+    private ZoneRestorationRecordRepository repo;
 
     @Override
     public ZoneRestorationRecord restoreZone(ZoneRestorationRecord record) {
