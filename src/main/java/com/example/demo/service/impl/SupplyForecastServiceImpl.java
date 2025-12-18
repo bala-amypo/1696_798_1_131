@@ -1,15 +1,3 @@
-package com.example.demo.service.impl;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.SupplyForecast;
-import com.example.demo.repository.SupplyForecastRepository;
-import com.example.demo.service.SupplyForecastService;
-
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
@@ -17,28 +5,28 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
     private SupplyForecastRepository repository;
 
     @Override
-    public SupplyForecast createForecast(SupplyForecast forecast) {
+    public SupplyForecast save(SupplyForecast forecast) {
         return repository.save(forecast);
     }
 
     @Override
-    public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
+    public SupplyForecast update(Long id, SupplyForecast forecast) {
         forecast.setId(id);
         return repository.save(forecast);
     }
 
     @Override
-    public Optional<SupplyForecast> getForecastById(Long id) {
+    public Optional<SupplyForecast> getById(Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public SupplyForecast getLatestForecast() {
+    public SupplyForecast getLatest() {
         return repository.findTopByOrderByForecastTimeDesc();
     }
 
     @Override
-    public List<SupplyForecast> getAllForecasts() {
+    public List<SupplyForecast> getAll() {
         return repository.findAll();
     }
 }
