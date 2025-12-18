@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/load-shedding")
+@RequestMapping("/api/load-shedding event")
 @Tag(name = "Load Shedding Event Controller")
 public class LoadSheddingEventController {
 
