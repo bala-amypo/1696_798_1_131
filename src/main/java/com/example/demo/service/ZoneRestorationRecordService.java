@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import com.example.demo.entity.ZoneRestorationRecord;
 
-public interface ZoneRestorationService {
+public interface ZoneRestorationRecordService {
 
     ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
 
