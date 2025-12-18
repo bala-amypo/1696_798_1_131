@@ -13,20 +13,11 @@ public class DemandReading {
 
     private Double demandValue;
 
-    private LocalDateTime timestamp;   // used for ordering latest readings
+    private LocalDateTime timestamp;   // exact name 'timestamp'
 
-    private Long zoneId;               // zone reference
+    private Long zoneId;               // exact name 'zoneId'
 
-    // Constructors
-    public DemandReading() {}
-
-    public DemandReading(Double demandValue, LocalDateTime timestamp, Long zoneId) {
-        this.demandValue = demandValue;
-        this.timestamp = timestamp;
-        this.zoneId = zoneId;
-    }
-
-    // Getters and setters
+    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
