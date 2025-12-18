@@ -6,9 +6,9 @@ import com.example.demo.entity.Zone;
 
 public interface ZoneService {
 
-    Zone save(Zone zone);                // renamed to 'save' to match controller
-    Zone update(Long id, Zone zone);     // renamed to 'update'
-    Optional<Zone> getById(Long id);     // renamed
-    List<Zone> getAll();                  // renamed
-    String deactivate(Long id);           // renamed
+    Zone save(Zone zone);
+    Zone update(Long id, Zone zone);
+    Optional<Zone> getById(Long id);
+    List<Zone> getAll();
+    String deactivate(Long id);
 }
