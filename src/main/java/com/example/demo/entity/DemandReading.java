@@ -1,32 +1,47 @@
 package com.example.demo.entity;
 
-import java.sql.Timestamp;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "demand_readings")
 public class DemandReading {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long zoneId;
-    private int demandValue;
-    private Timestamp recordedAt;
 
-    // Constructors
-    public DemandReading() {}
+    private Double demandValue;
 
-    public DemandReading(Long id, Long zoneId, int demandValue, Timestamp recordedAt) {
-        this.id = id;
-        this.zoneId = zoneId;
-        this.demandValue = demandValue;
-        this.recordedAt = recordedAt;
+    private LocalDateTime readingTime;
+
+    // Example relation (if any)
+    // @ManyToOne
+    // private Zone zone;
+
+    // getters and setters
+
+    public Long getId() {
+        return id;
     }
 
-    // Getters
-    public Long getId() { return id; }
-    public Long getZoneId() { return zoneId; }
-    public int getDemandValue() { return demandValue; }
-    public Timestamp getRecordedAt() { return recordedAt; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setZoneId(Long zoneId) { this.zoneId = zoneId; }
-    public void setDemandValue(int demandValue) { this.demandValue = demandValue; }
-    public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
+    public Double getDemandValue() {
+        return demandValue;
+    }
+
+    public void setDemandValue(Double demandValue) {
+        this.demandValue = demandValue;
+    }
+
+    public LocalDateTime getReadingTime() {
+        return readingTime;
+    }
+
+    public void setReadingTime(LocalDateTime readingTime) {
+        this.readingTime = readingTime;
+    }
 }
