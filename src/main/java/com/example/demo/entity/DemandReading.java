@@ -11,22 +11,24 @@ public class DemandReading {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double demandValue;
+    private int value; // Example field: the demand reading
 
-    private LocalDateTime timestamp;   // exact name 'timestamp'
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zone_id")
+    private Zone zone;
 
-    private Long zoneId;               // exact name 'zoneId'
+    private LocalDateTime createdAt;
 
-    // getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Double getDemandValue() { return demandValue; }
-    public void setDemandValue(Double demandValue) { this.demandValue = demandValue; }
+    public int getValue() { return value; }
+    public void setValue(int value) { this.value = value; }
 
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public Zone getZone() { return zone; }
+    public void setZone(Zone zone) { this.zone = zone; }
 
-    public Long getZoneId() { return zoneId; }
-    public void setZoneId(Long zoneId) { this.zoneId = zoneId; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
