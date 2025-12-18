@@ -1,12 +1,10 @@
 package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.example.demo.entity.SupplyForecast;
 
-@Repository
 public interface SupplyForecastRepository extends JpaRepository<SupplyForecast, Long> {
 
-    SupplyForecast findTopByOrderByGeneratedAtDesc();
+    // Latest forecast
+    SupplyForecast findTopByOrderByForecastTimeDesc();
 }
