@@ -22,6 +22,12 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
+    public Zone update(Long id, Zone zone) {
+        zone.setId(id);
+        return repo.save(zone);
+    }
+
+    @Override
     public Optional<Zone> getById(Long id) {
         return repo.findById(id);
     }
@@ -32,11 +38,13 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public void deactivate(Long id) {
+    public String deactivate(Long id) {
         Optional<Zone> zone = repo.findById(id);
-        zone.ifPresent(z -> {
-            z.setActive(false);
-            repo.save(z);
-        });
+        if (zone.isPresent()) {
+            zone.get().setActive(false);
+            repo.save(zone.get());
+            return "Zone Deactivated";
+        }
+        return "Zone Not Found";
     }
 }
