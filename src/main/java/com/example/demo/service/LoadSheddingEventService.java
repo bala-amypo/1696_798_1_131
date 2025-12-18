@@ -6,7 +6,7 @@ import com.example.demo.entity.LoadSheddingEvent;
 
 public interface LoadSheddingService {
 
-    LoadSheddingEvent triggerLoadShedding(Long forecastId);
+    LoadSheddingEvent triggerLoadSheddingEvent(Long forecastId);
 
     Optional<LoadSheddingEvent> getEventById(Long id);
 
