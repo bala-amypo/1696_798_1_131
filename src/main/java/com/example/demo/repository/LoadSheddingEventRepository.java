@@ -1,14 +1,10 @@
 package com.example.demo.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.entity.LoadShedding;
+
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.example.demo.entity.LoadSheddingEvent;
-
-@Repository
-public interface LoadSheddingEventRepository extends JpaRepository<LoadSheddingEvent, Long> {
-
-    List<LoadSheddingEvent> findByZoneId(Long zoneId);
+public interface LoadSheddingRepository extends JpaRepository<LoadShedding, Long> {
+    List<LoadShedding> findByActiveTrueOrderByPriorityLevelAsc();
 }
