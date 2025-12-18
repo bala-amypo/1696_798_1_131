@@ -7,6 +7,6 @@ import com.example.demo.entity.ZoneRestorationRecord;
 import java.util.List;
 
 @Repository
-public interface ZoneRestorationRepository extends JpaRepository<ZoneRestorationRecord, Long> {
+public interface ZoneRestorationRecordRepository extends JpaRepository<ZoneRestorationRecord, Long> {
     List<ZoneRestorationRecord> findByZoneId(Long zoneId);
 }

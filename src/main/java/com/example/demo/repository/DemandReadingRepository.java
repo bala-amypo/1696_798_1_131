@@ -7,6 +7,7 @@ import com.example.demo.entity.DemandReading;
 import java.util.List;
 
 @Repository
-public interface DemandReadingRepository extends JpaRepository<DemandReading, Long> {
-    List<DemandReading> findByZoneId(Long zoneId);
+public interface DemandReadingRepository {
+    DemandReading findTopByZoneIdOrderByRecordedAtDesc(Long zoneId);
+    List<DemandReading> findRecentReadings(Long zoneId, int n);
 }
