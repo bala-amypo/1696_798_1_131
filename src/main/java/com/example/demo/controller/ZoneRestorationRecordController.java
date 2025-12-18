@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.service.ZoneRestorationRecordService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,11 +15,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/restorations")
-@Tag(name = "Zone Restoration Controller")
-public class ZoneRestorationController {
+@Tag(name = "Zone Restoration Record Controller")
+public class ZoneRestorationRecordController {
 
     @Autowired
-    private ZoneRestorationService service;
+    private ZoneRestorationRecordService service;
 
     @Operation(summary = "Restore zone")
     @PostMapping("/")
