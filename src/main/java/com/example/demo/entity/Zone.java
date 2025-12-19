@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -11,32 +11,41 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(
+    name = "zones",
+    uniqueConstraints = @UniqueConstraint(columnNames = "zoneName")
+)
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String zoneName;
 
+    @Column(nullable = false)
     private Integer priorityLevel;
+
     private Integer population;
 
     @Builder.Default
     private Boolean active = true;
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     @PrePersist
     public void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
-        updatedAt = createdAt;
+        this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.active == null) {
+            this.active = true;
+        }
     }
 
     @PreUpdate
     public void onUpdate() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = Instant.now();
     }
 }
