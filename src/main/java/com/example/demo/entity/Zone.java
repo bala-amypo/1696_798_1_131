@@ -3,43 +3,40 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "zoneName"))
+@Builder
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String zoneName;
 
-    @Column(nullable = false)
     private Integer priorityLevel;
-
     private Integer population;
 
     @Builder.Default
     private Boolean active = true;
 
-    private Instant createdAt;
-    private Instant updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     @PrePersist
-    void onCreate() {
-        this.createdAt = Instant.now();
-        this.updatedAt = this.createdAt;
+    public void onCreate() {
+        createdAt = new Timestamp(System.currentTimeMillis());
+        updatedAt = createdAt;
     }
 
     @PreUpdate
-    void onUpdate() {
-        this.updatedAt = Instant.now();
+    public void onUpdate() {
+        updatedAt = new Timestamp(System.currentTimeMillis());
     }
 }

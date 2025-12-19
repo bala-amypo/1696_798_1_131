@@ -3,14 +3,14 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SupplyForecast {
 
     @Id
@@ -18,14 +18,13 @@ public class SupplyForecast {
     private Long id;
 
     private Double availableSupplyMW;
+    private Timestamp forecastStart;
+    private Timestamp forecastEnd;
 
-    private Instant forecastStart;
-    private Instant forecastEnd;
-
-    private Instant generatedAt;
+    private Timestamp generatedAt;
 
     @PrePersist
-    void onCreate() {
-        this.generatedAt = Instant.now();
+    public void onGenerate() {
+        generatedAt = new Timestamp(System.currentTimeMillis());
     }
 }

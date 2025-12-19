@@ -3,26 +3,24 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ZoneRestorationRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Zone zone;
 
-    private Instant restoredAt;
-
+    private Timestamp restoredAt;
     private Long eventId;
-
     private String notes;
 }
