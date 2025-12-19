@@ -18,22 +18,16 @@ public class DemandReadingController {
 
     @PostMapping
     public DemandReading create(@RequestBody DemandReading reading) {
-        return service.createReading(reading);
+        return service.create(reading);
+    }
+
+    @GetMapping("/{id}")
+    public DemandReading getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 
     @GetMapping("/zone/{zoneId}")
-    public List<DemandReading> getForZone(@PathVariable Long zoneId) {
-        return service.getReadingsForZone(zoneId);
-    }
-
-    @GetMapping("/zone/{zoneId}/latest")
-    public DemandReading latest(@PathVariable Long zoneId) {
-        return service.getLatestReading(zoneId);
-    }
-
-    @GetMapping("/zone/{zoneId}/recent")
-    public List<DemandReading> recent(@PathVariable Long zoneId,
-                                      @RequestParam int limit) {
-        return service.getRecentReadings(zoneId, limit);
+    public List<DemandReading> getByZone(@PathVariable Long zoneId) {
+        return service.getByZone(zoneId);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/supply-forecasts")
+@RequestMapping("/api/supply-forecast")
 public class SupplyForecastController {
 
     private final SupplyForecastService service;
@@ -18,27 +18,23 @@ public class SupplyForecastController {
 
     @PostMapping
     public SupplyForecast create(@RequestBody SupplyForecast forecast) {
-        return service.createForecast(forecast);
+        return service.create(forecast);
     }
 
     @PutMapping("/{id}")
-    public SupplyForecast update(@PathVariable Long id,
-                                 @RequestBody SupplyForecast forecast) {
-        return service.updateForecast(id, forecast);
+    public SupplyForecast update(
+            @PathVariable Long id,
+            @RequestBody SupplyForecast forecast) {
+        return service.update(id, forecast);
     }
 
     @GetMapping("/{id}")
     public SupplyForecast getById(@PathVariable Long id) {
-        return service.getForecastById(id);
-    }
-
-    @GetMapping("/latest")
-    public SupplyForecast latest() {
-        return service.getLatestForecast();
+        return service.getById(id);
     }
 
     @GetMapping
     public List<SupplyForecast> getAll() {
-        return service.getAllForecasts();
+        return service.getAll();
     }
 }
