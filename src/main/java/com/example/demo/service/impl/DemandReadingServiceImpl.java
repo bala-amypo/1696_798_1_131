@@ -1,43 +1,44 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.entity.DemandReading;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.DemandReadingRepository;
+import com.example.demo.repository.ZoneRepository;
+import com.example.demo.service.DemandReadingService;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.DemandReading;
-import com.example.demo.repository.DemandReadingRepository;
-import com.example.demo.service.DemandReadingService;
+import java.util.List;
 
 @Service
 public class DemandReadingServiceImpl implements DemandReadingService {
 
-    @Autowired
-    private DemandReadingRepository repository;
+    private final DemandReadingRepository demandReadingRepository;
+    private final ZoneRepository zoneRepository;
 
-    @Override
-    public DemandReading save(DemandReading reading) {
-        return repository.save(reading);
+    // EXACT constructor order
+    public DemandReadingServiceImpl(DemandReadingRepository demandReadingRepository,
+                                    ZoneRepository zoneRepository) {
+        this.demandReadingRepository = demandReadingRepository;
+        this.zoneRepository = zoneRepository;
     }
 
     @Override
-    public Optional<DemandReading> getById(Long id) {
-        return repository.findById(id);
+    public DemandReading createReading(DemandReading reading) {
+        return demandReadingRepository.save(reading);
     }
 
     @Override
-    public List<DemandReading> getByZone(Long zoneId) {
-        return repository.findByZoneId(zoneId);
+    public List<DemandReading> getReadingsForZone(Long zoneId) {
+        return demandReadingRepository.findByZoneIdOrderByRecordedAtDesc(zoneId);
     }
 
     @Override
-    public DemandReading getLatest(Long zoneId) {
-        return repository.findTopByZoneIdOrderByTimestampDesc(zoneId);
+    public DemandReading getLatestReading(Long zoneId) {
+        return demandReadingRepository.findFirstByZoneIdOrderByRecordedAtDesc(zoneId);
     }
 
     @Override
-    public List<DemandReading> getRecent(Long zoneId, int limit) {
-        return repository.findRecentByZone(zoneId, limit);
+    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
+        return getReadingsForZone(zoneId).stream().limit(limit).toList();
     }
 }

@@ -1,30 +1,25 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Zone;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.ZoneService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
 
+    // EXACT constructor order
     public ZoneServiceImpl(ZoneRepository zoneRepository) {
         this.zoneRepository = zoneRepository;
     }
 
     @Override
     public Zone createZone(Zone zone) {
-        if (zone.getPriorityLevel() < 1)
-            throw new BadRequestException("priorityLevel must be >= 1");
-
-        if (zoneRepository.findByZoneName(zone.getZoneName()).isPresent())
-            throw new BadRequestException("zoneName must be unique");
-
-        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
