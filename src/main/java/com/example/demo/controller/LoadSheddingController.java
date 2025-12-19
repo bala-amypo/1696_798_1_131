@@ -16,20 +16,23 @@ public class LoadSheddingController {
         this.service = service;
     }
 
-    @PostMapping("/{zoneId}")
-    public LoadSheddingEvent create(
-            @PathVariable Long zoneId,
-            @RequestBody LoadSheddingEvent event) {
-        return service.create(zoneId, event);
+    @PostMapping("/trigger/{forecastId}")
+    public LoadSheddingEvent trigger(@PathVariable Long forecastId) {
+        return service.triggerLoadShedding(forecastId);
     }
 
     @GetMapping("/{id}")
-    public LoadSheddingEvent getById(@PathVariable Long id) {
-        return service.getById(id);
+    public LoadSheddingEvent get(@PathVariable Long id) {
+        return service.getEventById(id);
     }
 
     @GetMapping("/zone/{zoneId}")
-    public List<LoadSheddingEvent> getByZone(@PathVariable Long zoneId) {
-        return service.getByZone(zoneId);
+    public List<LoadSheddingEvent> getForZone(@PathVariable Long zoneId) {
+        return service.getEventsForZone(zoneId);
+    }
+
+    @GetMapping
+    public List<LoadSheddingEvent> getAll() {
+        return service.getAllEvents();
     }
 }
