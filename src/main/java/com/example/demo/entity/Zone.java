@@ -1,20 +1,9 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.Instant;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -22,17 +11,22 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "zoneName"))
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String zoneName;
 
+    @Column(nullable = false)
     private Integer priorityLevel;
+
     private Integer population;
+
+    @Builder.Default
     private Boolean active = true;
 
     private Instant createdAt;
@@ -40,15 +34,12 @@ public class Zone {
 
     @PrePersist
     void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = createdAt;
-        if (active == null) {
-            active = true;
-        }
+        this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
     }
 
     @PreUpdate
     void onUpdate() {
-        updatedAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 }
