@@ -1,56 +1,67 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.AppUser;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AppUserRepository;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.AppUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class AppUserServiceImpl implements AppUserService {
+public class AppUserServiceImpl {
 
-    private final AppUserRepository appUserRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private AppUserRepository userRepo;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public AppUserServiceImpl(AppUserRepository appUserRepository,
-                              JwtTokenProvider jwtTokenProvider) {
-        this.appUserRepository = appUserRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
+    // Create a new user
+    public AppUser createUser(AppUser user) {
+        // encode password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
-    @Override
-    public AppUser register(String email, String password, String roleName) {
-
-        if (appUserRepository.findByEmail(email).isPresent()) {
-            throw new BadRequestException("Email must be unique");
-        }
-
-        AppUser user = AppUser.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .roles(Set.of(roleName)) // ✅ STRING ROLE
-                .active(true)
-                .build();
-
-        return appUserRepository.save(user);
+    // Get all users
+    public List<AppUser> getAllUsers() {
+        return userRepo.findAll();
     }
 
-    @Override
-    public String login(String email, String password) {
+    // Get user by ID
+    public AppUser getUserById(Long id) {
+        Optional<AppUser> userOpt = userRepo.findById(id);
+        return userOpt.orElse(null);
+    }
 
-        AppUser user = appUserRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadRequestException("Invalid credentials");
+    // Update user
+    public AppUser updateUser(Long id, AppUser userDetails) {
+        Optional<AppUser> userOpt = userRepo.findById(id);
+        if (userOpt.isPresent()) {
+            AppUser user = userOpt.get();
+            user.setUsername(userDetails.getUsername());
+            user.setEmail(userDetails.getEmail());
+            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            }
+            return userRepo.save(user);
         }
+        return null;
+    }
 
-        return jwtTokenProvider.createToken(user);
+    // Delete user
+    public boolean deleteUser(Long id) {
+        if (userRepo.existsById(id)) {
+            userRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // Find user by username (optional)
+    public AppUser findByUsername(String username) {
+        Optional<AppUser> userOpt = userRepo.findByUsername(username);
+        return userOpt.orElse(null);
     }
 }
