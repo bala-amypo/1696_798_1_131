@@ -1,35 +1,49 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ZoneRestorationRepository;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.entity.Zone;
+import com.example.demo.repository.ZoneRepository;
+import com.example.demo.service.ZoneService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ZoneServiceImpl implements ZoneRestorationService {
+public class ZoneServiceImpl implements ZoneService {
 
-    private final ZoneRestorationRepository repository;
+    private final ZoneRepository zoneRepository;
 
-    public ZoneServiceImpl(ZoneRestorationRepository repository) {
-        this.repository = repository;
+    public ZoneServiceImpl(ZoneRepository zoneRepository) {
+        this.zoneRepository = zoneRepository;
     }
 
     @Override
-    public ZoneRestorationRecord create(ZoneRestorationRecord record) {
-        return repository.save(record);
+    public Zone createZone(Zone zone) {
+        return zoneRepository.save(zone);
     }
 
     @Override
-    public ZoneRestorationRecord getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone restoration record not found"));
+    public Zone updateZone(Long id, Zone zone) {
+        Zone existing = getZoneById(id);
+        existing.setZoneName(zone.getZoneName());
+        existing.setPriorityLevel(zone.getPriorityLevel());
+        existing.setPopulation(zone.getPopulation());
+        return zoneRepository.save(existing);
     }
 
     @Override
-    public List<ZoneRestorationRecord> getByZone(Long zoneId) {
-        return repository.findByZoneId(zoneId);
+    public Zone getZoneById(Long id) {
+        return zoneRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Zone> getAllZones() {
+        return zoneRepository.findAll();
+    }
+
+    @Override
+    public void deactivateZone(Long id) {
+        Zone zone = getZoneById(id);
+        zone.setActive(false);
+        zoneRepository.save(zone);
     }
 }
