@@ -5,12 +5,11 @@ import com.example.demo.service.AppUserService;
 import com.example.demo.entity.AppUser;
 import com.example.demo.repository.AppUserRepository;
 
-@Service  // <-- This tells Spring to treat this as a bean
+@Service  // <-- This annotation is required
 public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository userRepo;
 
-    // Constructor injection (recommended)
     public AppUserServiceImpl(AppUserRepository userRepo) {
         this.userRepo = userRepo;
     }
