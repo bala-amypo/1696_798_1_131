@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -11,20 +11,27 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "supply_forecasts")
 public class SupplyForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Double availableSupplyMW;
-    private Timestamp forecastStart;
-    private Timestamp forecastEnd;
 
-    private Timestamp generatedAt;
+    @Column(nullable = false)
+    private Instant forecastStart;
+
+    @Column(nullable = false)
+    private Instant forecastEnd;
+
+    @Column(nullable = false)
+    private Instant generatedAt;
 
     @PrePersist
-    public void onGenerate() {
-        generatedAt = new Timestamp(System.currentTimeMillis());
+    public void onCreate() {
+        this.generatedAt = Instant.now();
     }
 }

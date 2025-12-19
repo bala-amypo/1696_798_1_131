@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "load_shedding_events")
 public class LoadSheddingEvent {
 
     @Id
@@ -18,12 +19,18 @@ public class LoadSheddingEvent {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
-    private Timestamp eventStart;
-    private Timestamp eventEnd;
+    @Column(nullable = false)
+    private Instant eventStart;
+
+    private Instant eventEnd;
 
     private String reason;
+
     private Long triggeredByForecastId;
+
+    @Column(nullable = false)
     private Double expectedDemandReductionMW;
 }

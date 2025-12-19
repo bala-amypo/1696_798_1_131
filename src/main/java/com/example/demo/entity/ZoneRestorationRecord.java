@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "zone_restoration_records")
 public class ZoneRestorationRecord {
 
     @Id
@@ -18,9 +19,14 @@ public class ZoneRestorationRecord {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
-    private Timestamp restoredAt;
+    @Column(nullable = false)
+    private Instant restoredAt;
+
+    @Column(nullable = false)
     private Long eventId;
+
     private String notes;
 }
