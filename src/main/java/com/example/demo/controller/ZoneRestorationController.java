@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.ZoneRestorationRecord;
+import com.example.demo.service.ZoneRestorationService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/restorations")
 public class ZoneRestorationController {
@@ -14,12 +22,12 @@ public class ZoneRestorationController {
     }
 
     @GetMapping("/{id}")
-    public ZoneRestorationRecord get(@PathVariable Long id) {
+    public ZoneRestorationRecord getById(@PathVariable Long id) {
         return service.getRecordById(id);
     }
 
     @GetMapping("/zone/{zoneId}")
-    public List<ZoneRestorationRecord> forZone(@PathVariable Long zoneId) {
+    public List<ZoneRestorationRecord> getByZone(@PathVariable Long zoneId) {
         return service.getRecordsForZone(zoneId);
     }
 }
