@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.ZoneRestorationRecord;
 import java.util.List;
 
-public interface ZoneRestorationRecordService {
+public interface ZoneRestorationService {
 
     ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
     ZoneRestorationRecord getRecordById(Long id);
