@@ -1,3 +1,8 @@
+package com.example.demo.controller;
+
+import com.example.demo.service.AppUserService;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
