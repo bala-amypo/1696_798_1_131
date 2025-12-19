@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Zone;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface ZoneService {
 
@@ -10,9 +10,9 @@ public interface ZoneService {
 
     Zone updateZone(Long id, Zone zone);
 
-    Optional<Zone> getZoneById(Long id);
+    Zone getZoneById(Long id);
 
     List<Zone> getAllZones();
 
-    String deactivateZone(Long id);
+    void deactivateZone(Long id);
 }
