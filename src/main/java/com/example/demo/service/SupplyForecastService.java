@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
 import com.example.demo.entity.SupplyForecast;
+import java.util.List;
 
 public interface SupplyForecastService {
 
-    SupplyForecast save(SupplyForecast forecast);
-    SupplyForecast update(Long id, SupplyForecast forecast);
-    Optional<SupplyForecast> getById(Long id);
-    SupplyForecast getLatest();
-    List<SupplyForecast> getAll();
+    SupplyForecast createForecast(SupplyForecast forecast);
+    SupplyForecast updateForecast(Long id, SupplyForecast forecast);
+    SupplyForecast getForecastById(Long id);
+    SupplyForecast getLatestForecast();
+    List<SupplyForecast> getAllForecasts();
 }
