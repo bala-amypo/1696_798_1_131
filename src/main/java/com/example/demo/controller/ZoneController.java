@@ -1,42 +1,50 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
-
 import com.example.demo.entity.Zone;
 import com.example.demo.service.ZoneService;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/zones")
 public class ZoneController {
 
-    @Autowired
-    private ZoneService zoneService;
+    private final ZoneService service;
 
-    @PostMapping("/")
+    public ZoneController(ZoneService service) {
+        this.service = service;
+    }
+
+    @PostMapping
     public Zone create(@RequestBody Zone zone) {
-        return zoneService.createZone(zone); // corrected
+        return service.createZone(zone);
     }
 
     @PutMapping("/{id}")
     public Zone update(@PathVariable Long id, @RequestBody Zone zone) {
-        return zoneService.updateZone(id, zone); // corrected
+        return service.updateZone(id, zone);
     }
 
     @GetMapping("/{id}")
-    public Optional<Zone> getById(@PathVariable Long id) {
-        return zoneService.getZoneById(id); // corrected
+    public Zone get(@PathVariable Long id) {
+        return service.getZoneById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Zone> getAll() {
-        return zoneService.getAllZones(); // corrected
+        return service.getAllZones();
     }
 
-    @PostMapping("/{id}/deactivate")
-    public String deactivate(@PathVariable Long id) {
-        return zoneService.deactivateZone(id); // corrected
+    @PutMapping("/{id}/deactivate")
+    public void deactivate(@PathVariable Long id) {
+        service.deactivateZone(id);
     }
 }
