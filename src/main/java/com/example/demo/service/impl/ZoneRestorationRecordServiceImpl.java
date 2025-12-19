@@ -6,17 +6,17 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.LoadSheddingEventRepository;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.repository.ZoneRestorationRecordRepository;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.service.ZoneRestorationRecordService;
 
 import java.util.List;
 
-public class ZoneRestorationServiceImpl implements ZoneRestorationService {
+public class ZoneRestorationRecordServiceImpl implements ZoneRestorationRecordService {
 
     private final ZoneRestorationRecordRepository restorationRepo;
     private final LoadSheddingEventRepository eventRepo;
     private final ZoneRepository zoneRepo;
 
-    public ZoneRestorationServiceImpl(
+    public ZoneRestorationRecordServiceImpl(
             ZoneRestorationRecordRepository restorationRepo,
             LoadSheddingEventRepository eventRepo,
             ZoneRepository zoneRepo) {
