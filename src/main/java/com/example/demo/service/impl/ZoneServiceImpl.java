@@ -8,30 +8,24 @@ import com.example.demo.service.ZoneService;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class ZoneServiceImpl implements ZoneService {
 
-    private final ZoneRepository repo;
+    private final ZoneRepository zoneRepository;
 
-    public ZoneServiceImpl(ZoneRepository repo) {
-        this.repo = repo;
+    public ZoneServiceImpl(ZoneRepository zoneRepository) {
+        this.zoneRepository = zoneRepository;
     }
 
     @Override
     public Zone createZone(Zone zone) {
-        if (zone.getPriorityLevel() < 1) {
-            throw new BadRequestException("priority >= 1");
-        }
+        if (zone.getPriorityLevel() < 1)
+            throw new BadRequestException("priorityLevel must be >= 1");
 
-        repo.findByZoneName(zone.getZoneName())
-                .ifPresent(z -> {
-                    throw new BadRequestException("unique");
-                });
+        if (zoneRepository.findByZoneName(zone.getZoneName()).isPresent())
+            throw new BadRequestException("zoneName must be unique");
 
         zone.setActive(true);
-        return repo.save(zone);
+        return zoneRepository.save(zone);
     }
 
     @Override
@@ -40,24 +34,24 @@ public class ZoneServiceImpl implements ZoneService {
         existing.setZoneName(zone.getZoneName());
         existing.setPriorityLevel(zone.getPriorityLevel());
         existing.setPopulation(zone.getPopulation());
-        return repo.save(existing);
+        return zoneRepository.save(existing);
     }
 
     @Override
     public Zone getZoneById(Long id) {
-        return repo.findById(id)
+        return zoneRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
     }
 
     @Override
     public List<Zone> getAllZones() {
-        return repo.findAll();
+        return zoneRepository.findAll();
     }
 
     @Override
     public void deactivateZone(Long id) {
         Zone zone = getZoneById(id);
         zone.setActive(false);
-        repo.save(zone);
+        zoneRepository.save(zone);
     }
 }
