@@ -10,34 +10,34 @@ import java.util.List;
 @RequestMapping("/api/zones")
 public class ZoneController {
 
-    private final ZoneService service;
+    private final ZoneService zoneService;
 
-    public ZoneController(ZoneService service) {
-        this.service = service;
+    public ZoneController(ZoneService zoneService) {
+        this.zoneService = zoneService;
     }
 
     @PostMapping
     public Zone create(@RequestBody Zone zone) {
-        return service.createZone(zone);
+        return zoneService.createZone(zone);
     }
 
     @PutMapping("/{id}")
     public Zone update(@PathVariable Long id, @RequestBody Zone zone) {
-        return service.updateZone(id, zone);
+        return zoneService.updateZone(id, zone);
     }
 
     @GetMapping("/{id}")
-    public Zone getById(@PathVariable Long id) {
-        return service.getZoneById(id);
+    public Zone get(@PathVariable Long id) {
+        return zoneService.getZoneById(id);
     }
 
     @GetMapping
     public List<Zone> getAll() {
-        return service.getAllZones();
+        return zoneService.getAllZones();
     }
 
     @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
-        service.deactivateZone(id);
+        zoneService.deactivateZone(id);
     }
 }
