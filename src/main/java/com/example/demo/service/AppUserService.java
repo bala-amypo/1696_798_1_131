@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.AppUser;
+
 public interface AppUserService {
-    String register(String email, String password, String role);
-    String login(String email, String password);
+    AppUser findByUsername(String username);
 }

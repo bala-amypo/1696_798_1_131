@@ -1,67 +1,22 @@
 package com.example.demo.service.impl;
 
+import org.springframework.stereotype.Service;
+import com.example.demo.service.AppUserService;
 import com.example.demo.entity.AppUser;
 import com.example.demo.repository.AppUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+@Service  // <-- This tells Spring to treat this as a bean
+public class AppUserServiceImpl implements AppUserService {
 
-@Service
-public class AppUserServiceImpl {
+    private final AppUserRepository userRepo;
 
-    @Autowired
-    private AppUserRepository userRepo;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    // Create a new user
-    public AppUser createUser(AppUser user) {
-        // encode password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+    // Constructor injection (recommended)
+    public AppUserServiceImpl(AppUserRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
-    // Get all users
-    public List<AppUser> getAllUsers() {
-        return userRepo.findAll();
-    }
-
-    // Get user by ID
-    public AppUser getUserById(Long id) {
-        Optional<AppUser> userOpt = userRepo.findById(id);
-        return userOpt.orElse(null);
-    }
-
-    // Update user
-    public AppUser updateUser(Long id, AppUser userDetails) {
-        Optional<AppUser> userOpt = userRepo.findById(id);
-        if (userOpt.isPresent()) {
-            AppUser user = userOpt.get();
-            user.setUsername(userDetails.getUsername());
-            user.setEmail(userDetails.getEmail());
-            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-            }
-            return userRepo.save(user);
-        }
-        return null;
-    }
-
-    // Delete user
-    public boolean deleteUser(Long id) {
-        if (userRepo.existsById(id)) {
-            userRepo.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    // Find user by username (optional)
+    @Override
     public AppUser findByUsername(String username) {
-        Optional<AppUser> userOpt = userRepo.findByUsername(username);
-        return userOpt.orElse(null);
+        return userRepo.findByUsername(username).orElse(null);
     }
 }
