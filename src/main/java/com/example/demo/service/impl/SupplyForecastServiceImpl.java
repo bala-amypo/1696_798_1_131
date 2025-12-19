@@ -11,40 +11,32 @@ import java.util.List;
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
-    private final SupplyForecastRepository supplyForecastRepository;
+    private final SupplyForecastRepository repository;
 
-    // EXACT constructor order
-    public SupplyForecastServiceImpl(SupplyForecastRepository supplyForecastRepository) {
-        this.supplyForecastRepository = supplyForecastRepository;
+    public SupplyForecastServiceImpl(SupplyForecastRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public SupplyForecast createForecast(SupplyForecast forecast) {
-        return supplyForecastRepository.save(forecast);
+    public SupplyForecast create(SupplyForecast forecast) {
+        return repository.save(forecast);
     }
 
     @Override
-    public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
-        SupplyForecast existing = getForecastById(id);
-        existing.setAvailableSupplyMW(forecast.getAvailableSupplyMW());
-        existing.setForecastStart(forecast.getForecastStart());
-        existing.setForecastEnd(forecast.getForecastEnd());
-        return supplyForecastRepository.save(existing);
+    public SupplyForecast update(Long id, SupplyForecast forecast) {
+        SupplyForecast existing = getById(id);
+        forecast.setId(existing.getId());
+        return repository.save(forecast);
     }
 
     @Override
-    public SupplyForecast getForecastById(Long id) {
-        return supplyForecastRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
+    public SupplyForecast getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SupplyForecast not found"));
     }
 
     @Override
-    public SupplyForecast getLatestForecast() {
-        return supplyForecastRepository.findFirstByOrderByGeneratedAtDesc();
-    }
-
-    @Override
-    public List<SupplyForecast> getAllForecasts() {
-        return supplyForecastRepository.findAll();
+    public List<SupplyForecast> getAll() {
+        return repository.findAll();
     }
 }
