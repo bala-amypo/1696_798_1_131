@@ -1,32 +1,34 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+import java.time.Instant;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "demand_readings")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DemandReading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double demandValue;
+    @ManyToOne
+    private Zone zone;
 
-    private LocalDateTime timestamp;   // exact name 'timestamp'
-
-    private Long zoneId;               // exact name 'zoneId'
-
-    // getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Double getDemandValue() { return demandValue; }
-    public void setDemandValue(Double demandValue) { this.demandValue = demandValue; }
-
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-
-    public Long getZoneId() { return zoneId; }
-    public void setZoneId(Long zoneId) { this.zoneId = zoneId; }
+    private Double demandMW;
+    private Instant recordedAt;
 }
