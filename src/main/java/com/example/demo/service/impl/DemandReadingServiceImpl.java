@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DemandReading;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DemandReadingRepository;
-import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.DemandReadingService;
 import org.springframework.stereotype.Service;
 
@@ -12,33 +11,25 @@ import java.util.List;
 @Service
 public class DemandReadingServiceImpl implements DemandReadingService {
 
-    private final DemandReadingRepository demandReadingRepository;
-    private final ZoneRepository zoneRepository;
+    private final DemandReadingRepository repository;
 
-    // EXACT constructor order
-    public DemandReadingServiceImpl(DemandReadingRepository demandReadingRepository,
-                                    ZoneRepository zoneRepository) {
-        this.demandReadingRepository = demandReadingRepository;
-        this.zoneRepository = zoneRepository;
+    public DemandReadingServiceImpl(DemandReadingRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public DemandReading createReading(DemandReading reading) {
-        return demandReadingRepository.save(reading);
+    public DemandReading create(DemandReading reading) {
+        return repository.save(reading);
     }
 
     @Override
-    public List<DemandReading> getReadingsForZone(Long zoneId) {
-        return demandReadingRepository.findByZoneIdOrderByRecordedAtDesc(zoneId);
+    public DemandReading getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DemandReading not found"));
     }
 
     @Override
-    public DemandReading getLatestReading(Long zoneId) {
-        return demandReadingRepository.findFirstByZoneIdOrderByRecordedAtDesc(zoneId);
-    }
-
-    @Override
-    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
-        return getReadingsForZone(zoneId).stream().limit(limit).toList();
+    public List<DemandReading> getByZone(Long zoneId) {
+        return repository.findByZoneId(zoneId);
     }
 }
