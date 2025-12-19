@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.SupplyForecast;
+import com.example.demo.service.SupplyForecastService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/supply-forecasts")
 public class SupplyForecastController {
@@ -20,7 +28,7 @@ public class SupplyForecastController {
     }
 
     @GetMapping("/{id}")
-    public SupplyForecast get(@PathVariable Long id) {
+    public SupplyForecast getById(@PathVariable Long id) {
         return service.getForecastById(id);
     }
 
@@ -30,7 +38,7 @@ public class SupplyForecastController {
     }
 
     @GetMapping
-    public List<SupplyForecast> all() {
+    public List<SupplyForecast> getAll() {
         return service.getAllForecasts();
     }
 }
