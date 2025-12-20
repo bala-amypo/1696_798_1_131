@@ -18,6 +18,7 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
     private final LoadSheddingEventRepository eventRepo;
     private final ZoneRepository zoneRepo;
 
+    // ⚠️ constructor order matters
     public ZoneRestorationServiceImpl(
             ZoneRestorationRecordRepository recordRepo,
             LoadSheddingEventRepository eventRepo,
@@ -37,7 +38,7 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
 
         if (!record.getRestoredAt().isAfter(event.getEventStart())) {
-            throw new BadRequestException("after event start");
+            throw new BadRequestException("restoredAt must be after event start");
         }
 
         record.setZone(zone);

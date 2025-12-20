@@ -16,6 +16,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     private final DemandReadingRepository readingRepo;
     private final LoadSheddingEventRepository eventRepo;
 
+    // ⚠️ constructor order matters
     public LoadSheddingServiceImpl(
             SupplyForecastRepository forecastRepo,
             ZoneRepository zoneRepo,
@@ -33,30 +34,42 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
         SupplyForecast forecast = forecastRepo.findById(forecastId)
                 .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
 
-        List<Zone> zones = zoneRepo.findByActiveTrueOrderByPriorityLevelAsc();
-        if (zones.isEmpty()) {
-            throw new BadRequestException("No suitable");
+        List<Zone> activeZones =
+                zoneRepo.findByActiveTrueOrderByPriorityLevelAsc();
+
+        if (activeZones.isEmpty()) {
+            throw new BadRequestException("No suitable zones");
         }
 
-        for (Zone zone : zones) {
-            DemandReading reading = readingRepo
-                    .findFirstByZoneIdOrderByRecordedAtDesc(zone.getId())
-                    .orElse(null);
-
-            if (reading != null && reading.getDemandMW() > forecast.getAvailableSupplyMW()) {
-                LoadSheddingEvent event = LoadSheddingEvent.builder()
-                        .zone(zone)
-                        .eventStart(Instant.now())
-                        .expectedDemandReductionMW(reading.getDemandMW())
-                        .triggeredByForecastId(forecastId)
-                        .reason("Overload")
-                        .build();
-
-                return eventRepo.save(event);
-            }
+        double totalDemand = 0;
+        for (Zone zone : activeZones) {
+            readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId())
+                    .ifPresent(r -> totalDemand += r.getDemandMW());
         }
 
-        throw new BadRequestException("No overload");
+        if (totalDemand <= forecast.getAvailableSupplyMW()) {
+            throw new BadRequestException("No overload");
+        }
+
+        // pick lowest-priority zone (last in asc list)
+        Zone targetZone = activeZones.get(activeZones.size() - 1);
+
+        DemandReading latest =
+                readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(targetZone.getId())
+                        .orElseThrow(() -> new BadRequestException("No suitable zones"));
+
+        double reduction =
+                Math.max(0, totalDemand - forecast.getAvailableSupplyMW());
+
+        LoadSheddingEvent event = LoadSheddingEvent.builder()
+                .zone(targetZone)
+                .eventStart(Instant.now())
+                .reason("Overload")
+                .triggeredByForecastId(forecastId)
+                .expectedDemandReductionMW(reduction)
+                .build();
+
+        return eventRepo.save(event);
     }
 
     @Override
