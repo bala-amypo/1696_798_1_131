@@ -1,33 +1,34 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.service.AppUserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/restorations")
-public class ZoneRestorationController {
+@RequestMapping("/auth")
+public class AuthController {
 
-    private final ZoneRestorationService service;
+    private final AppUserService service;
 
-    public ZoneRestorationController(ZoneRestorationService service) {
+    public AuthController(AppUserService service) {
         this.service = service;
     }
 
-    @PostMapping
-    public ZoneRestorationRecord restore(@RequestBody ZoneRestorationRecord record) {
-        return service.restoreZone(record);
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody AuthRequest request) {
+        return service.register(
+                request.getEmail(),
+                request.getPassword(),
+                "USER"
+        );
     }
 
-    @GetMapping("/{id}")
-    public ZoneRestorationRecord getById(@PathVariable Long id) {
-        return service.getRecordById(id);
-    }
-
-    @GetMapping("/zone/{zoneId}")
-    public List<ZoneRestorationRecord> getForZone(@PathVariable Long zoneId) {
-        return service.getRecordsForZone(zoneId);
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody AuthRequest request) {
+        return service.login(
+                request.getEmail(),
+                request.getPassword()
+        );
     }
 }
