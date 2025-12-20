@@ -7,6 +7,9 @@ import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.ZoneService;
 
 import java.util.List;
+import.org.springframework.stereotype.Service;
+@Service
+
 
 public class ZoneServiceImpl implements ZoneService {
 

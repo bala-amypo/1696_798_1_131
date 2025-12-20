@@ -15,6 +15,9 @@ import com.example.demo.service.LoadSheddingService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import.org.springframework.stereotype.Service;
+@Service
+
 
 public class LoadSheddingServiceImpl implements LoadSheddingService {
 

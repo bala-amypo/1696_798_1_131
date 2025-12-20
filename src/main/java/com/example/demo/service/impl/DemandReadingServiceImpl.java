@@ -10,6 +10,9 @@ import com.example.demo.service.DemandReadingService;
 
 import java.time.Instant;
 import java.util.List;
+import.org.springframework.stereotype.Service;
+@Service
+
 
 public class DemandReadingServiceImpl implements DemandReadingService {
 
