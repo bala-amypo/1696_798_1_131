@@ -10,6 +10,8 @@ import com.example.demo.service.AppUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
+import org.springframework.stereotype.Service;
+@Service
 
 public class AppUserServiceImpl implements AppUserService {
 
