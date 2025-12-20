@@ -8,11 +8,11 @@ import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AppUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import org.springframework.stereotype.Service;
-@Service
 
+@Service   // ✅ THIS IS CRITICAL
 public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository userRepo;
@@ -48,7 +48,12 @@ public class AppUserServiceImpl implements AppUserService {
 
         String token = tokenProvider.createToken(user);
 
-        return new AuthResponse(token, user.getId(), user.getEmail(), role);
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                role
+        );
     }
 
     @Override
@@ -64,6 +69,11 @@ public class AppUserServiceImpl implements AppUserService {
         String role = user.getRoles().iterator().next().getName();
         String token = tokenProvider.createToken(user);
 
-        return new AuthResponse(token, user.getId(), user.getEmail(), role);
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                role
+        );
     }
 }
