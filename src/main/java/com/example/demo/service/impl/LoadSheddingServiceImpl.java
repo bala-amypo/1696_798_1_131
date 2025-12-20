@@ -15,7 +15,7 @@ import com.example.demo.service.LoadSheddingService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import.org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 @Service
 
 
