@@ -22,7 +22,7 @@ public class ZoneRestorationController {
     }
 
     @GetMapping("/{id}")
-    public ZoneRestorationRecord get(@PathVariable Long id) {
+    public ZoneRestorationRecord getById(@PathVariable Long id) {
         return service.getRecordById(id);
     }
 

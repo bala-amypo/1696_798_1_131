@@ -22,7 +22,7 @@ public class LoadSheddingController {
     }
 
     @GetMapping("/{id}")
-    public LoadSheddingEvent get(@PathVariable Long id) {
+    public LoadSheddingEvent getById(@PathVariable Long id) {
         return service.getEventById(id);
     }
 
