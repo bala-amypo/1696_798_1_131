@@ -8,10 +8,9 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "load_shedding_events")
 public class LoadSheddingEvent {
 
     @Id
@@ -19,7 +18,6 @@ public class LoadSheddingEvent {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     @Column(nullable = false)

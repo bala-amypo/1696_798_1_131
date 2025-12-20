@@ -8,9 +8,9 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(
     name = "zones",
     uniqueConstraints = @UniqueConstraint(columnNames = "zoneName")
@@ -36,16 +36,13 @@ public class Zone {
     private Instant updatedAt;
 
     @PrePersist
-    public void onCreate() {
+    void onCreate() {
         this.createdAt = Instant.now();
-        this.updatedAt = this.createdAt;
-        if (this.active == null) {
-            this.active = true;
-        }
+        this.updatedAt = Instant.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
+    void onUpdate() {
         this.updatedAt = Instant.now();
     }
 }

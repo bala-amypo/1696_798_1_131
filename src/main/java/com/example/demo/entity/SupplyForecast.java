@@ -8,10 +8,9 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "supply_forecasts")
 public class SupplyForecast {
 
     @Id
@@ -27,11 +26,10 @@ public class SupplyForecast {
     @Column(nullable = false)
     private Instant forecastEnd;
 
-    @Column(nullable = false)
     private Instant generatedAt;
 
     @PrePersist
-    public void onCreate() {
+    void onCreate() {
         this.generatedAt = Instant.now();
     }
 }

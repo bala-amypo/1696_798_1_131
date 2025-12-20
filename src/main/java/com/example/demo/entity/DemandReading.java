@@ -8,10 +8,9 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "demand_readings")
 public class DemandReading {
 
     @Id
@@ -19,7 +18,6 @@ public class DemandReading {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     @Column(nullable = false)
