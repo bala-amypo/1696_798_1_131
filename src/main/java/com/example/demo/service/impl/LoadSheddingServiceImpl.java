@@ -14,6 +14,7 @@ import com.example.demo.service.LoadSheddingService;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public class LoadSheddingServiceImpl implements LoadSheddingService {
 
@@ -22,7 +23,6 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     private final DemandReadingRepository readingRepo;
     private final LoadSheddingEventRepository eventRepo;
 
-    // ⚠️ Constructor order matters for tests
     public LoadSheddingServiceImpl(
             SupplyForecastRepository forecastRepo,
             ZoneRepository zoneRepo,
@@ -46,16 +46,14 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
             throw new BadRequestException("No suitable zones");
         }
 
-        // ✅ FIXED PART (no lambda modification)
         double totalDemand = 0;
 
         for (Zone zone : activeZones) {
-            DemandReading reading =
-                    readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId())
-                            .orElse(null);
+            Optional<DemandReading> opt =
+                    readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
 
-            if (reading != null) {
-                totalDemand += reading.getDemandMW();
+            if (opt.isPresent()) {
+                totalDemand = totalDemand + opt.get().getDemandMW();
             }
         }
 
@@ -63,7 +61,6 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
             throw new BadRequestException("No overload");
         }
 
-        // pick lowest priority zone (last in asc list)
         Zone targetZone = activeZones.get(activeZones.size() - 1);
 
         DemandReading latestReading =
@@ -77,7 +74,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
                 .eventStart(Instant.now())
                 .reason("Overload")
                 .triggeredByForecastId(forecastId)
-                .expectedDemandReductionMW(Math.max(0, reduction))
+                .expectedDemandReductionMW(reduction)
                 .build();
 
         return eventRepo.save(event);
