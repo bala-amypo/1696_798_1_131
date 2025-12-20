@@ -19,11 +19,13 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
     @Override
     public SupplyForecast createForecast(SupplyForecast forecast) {
         if (forecast.getAvailableSupplyMW() < 0) {
-            throw new BadRequestException(">= 0");
+            throw new BadRequestException("availableSupplyMW must be >= 0");
         }
-        if (forecast.getForecastStart().isAfter(forecast.getForecastEnd())) {
-            throw new BadRequestException("range");
+
+        if (!forecast.getForecastStart().isBefore(forecast.getForecastEnd())) {
+            throw new BadRequestException("Invalid range");
         }
+
         return repo.save(forecast);
     }
 

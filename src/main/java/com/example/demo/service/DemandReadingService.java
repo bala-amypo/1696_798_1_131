@@ -1,11 +1,12 @@
 package com.example.demo.service;
 
-import org.springframework.stereotype.Service;
+import com.example.demo.entity.DemandReading;
 
-@Service
-public class DemandReadingService {
+import java.util.List;
 
-    public String getStatus() {
-        return "Demand Reading Service Working";
-    }
+public interface DemandReadingService {
+    DemandReading createReading(DemandReading reading);
+    List<DemandReading> getReadingsForZone(Long zoneId);
+    DemandReading getLatestReading(Long zoneId);
+    List<DemandReading> getRecentReadings(Long zoneId, int limit);
 }

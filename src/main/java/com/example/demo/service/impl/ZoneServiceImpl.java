@@ -19,18 +19,22 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone createZone(Zone zone) {
         if (zone.getPriorityLevel() < 1) {
-            throw new BadRequestException("priority >= 1");
+            throw new BadRequestException("priorityLevel must be >= 1");
         }
 
         zoneRepository.findByZoneName(zone.getZoneName())
-                .ifPresent(z -> { throw new BadRequestException("unique"); });
+                .ifPresent(z -> {
+                    throw new BadRequestException("zoneName must be unique");
+                });
 
+        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-        Zone existing = getZoneById(id);
+        Zone existing = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
 
         existing.setZoneName(zone.getZoneName());
         existing.setPriorityLevel(zone.getPriorityLevel());
@@ -52,7 +56,8 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deactivateZone(Long id) {
-        Zone zone = getZoneById(id);
+        Zone zone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
         zone.setActive(false);
         zoneRepository.save(zone);
     }
