@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Service   // ✅ THIS IS CRITICAL
+@Service   
 public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository userRepo;
