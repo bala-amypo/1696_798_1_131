@@ -20,10 +20,6 @@ public class SupplyForecast {
     @Column(nullable = false)
     private Double availableSupplyMW;
 
-    // ✅ REQUIRED BY LOAD-SHEDDING TESTS
-    @Column(nullable = false)
-    private Double predictedDemandMW;
-
     @Column(nullable = false)
     private Instant forecastStart;
 
