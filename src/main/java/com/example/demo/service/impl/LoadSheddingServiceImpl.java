@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.DemandReading;
 import com.example.demo.entity.LoadSheddingEvent;
 import com.example.demo.entity.SupplyForecast;
 import com.example.demo.entity.Zone;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.DemandReadingRepository;
 import com.example.demo.repository.LoadSheddingEventRepository;
 import com.example.demo.repository.SupplyForecastRepository;
 import com.example.demo.repository.ZoneRepository;
@@ -12,24 +14,28 @@ import com.example.demo.service.LoadSheddingService;
 
 import java.time.Instant;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.stereotype.Service;
-
 @Service
+
+
 public class LoadSheddingServiceImpl implements LoadSheddingService {
 
     private final SupplyForecastRepository forecastRepo;
     private final ZoneRepository zoneRepo;
+    private final DemandReadingRepository readingRepo;
     private final LoadSheddingEventRepository eventRepo;
 
-  public LoadSheddingServiceImpl(
-        SupplyForecastRepository forecastRepo,
-        ZoneRepository zoneRepo,
-        LoadSheddingEventRepository eventRepo) {
-    this.forecastRepo = forecastRepo;
-    this.zoneRepo = zoneRepo;
-    this.eventRepo = eventRepo;
-}
+    public LoadSheddingServiceImpl(
+            SupplyForecastRepository forecastRepo,
+            ZoneRepository zoneRepo,
+            DemandReadingRepository readingRepo,
+            LoadSheddingEventRepository eventRepo) {
+        this.forecastRepo = forecastRepo;
+        this.zoneRepo = zoneRepo;
+        this.readingRepo = readingRepo;
+        this.eventRepo = eventRepo;
+    }
 
 @Override
 public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
@@ -72,7 +78,6 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     return eventRepo.save(event);
 }
 
-
     @Override
     public LoadSheddingEvent getEventById(Long id) {
         return eventRepo.findById(id)
@@ -88,4 +93,4 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     public List<LoadSheddingEvent> getAllEvents() {
         return eventRepo.findAll();
     }
-}
+} based on your solution ideas i think i shoyuld make changes in this file 
