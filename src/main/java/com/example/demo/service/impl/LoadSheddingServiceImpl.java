@@ -97,4 +97,4 @@ for (Zone zone : activeZones) {
     public List<LoadSheddingEvent> getAllEvents() {
         return eventRepo.findAll();
     }
-} based on your solution ideas i think i shoyuld make changes in this file 
+} 
