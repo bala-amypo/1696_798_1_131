@@ -38,7 +38,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     }
 
 @Override
-public boolean triggerLoadShedding(Long forecastId) {
+public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     SupplyForecast forecast = forecastRepo.findById(forecastId)
             .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
@@ -81,10 +81,7 @@ public boolean triggerLoadShedding(Long forecastId) {
             .expectedDemandReductionMW(reduction)
             .build();
 
-    eventRepo.save(event);
-
-    // ✅ REQUIRED BY TEST
-    return true;
+    return eventRepo.save(event);
 }
 
 
