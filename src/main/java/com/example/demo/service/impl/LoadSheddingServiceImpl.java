@@ -52,9 +52,14 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     double totalDemand = 0;
 
     for (Zone zone : activeZones) {
-        readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId())
-                .ifPresent(r -> totalDemand += r.getDemandMW());
+    Optional<DemandReading> opt =
+            readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
+
+    if (opt.isPresent()) {
+        totalDemand += opt.get().getDemandMW();
     }
+}
+
 
     // ✅ REQUIRED BY TEST
     if (totalDemand <= forecast.getAvailableSupplyMW()) {
