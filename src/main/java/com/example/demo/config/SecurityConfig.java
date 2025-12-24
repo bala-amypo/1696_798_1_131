@@ -10,13 +10,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // ✅ REQUIRED for AppUserServiceImpl
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Disable auth for now so app starts & Swagger works
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
