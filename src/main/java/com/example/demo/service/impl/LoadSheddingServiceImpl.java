@@ -60,10 +60,10 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
         }
 
         // ✅ Required by testTriggerLoadShedding_noOverload_throws
-        if (totalDemand <= forecast.getAvailableSupplyMW()) {
-           throw new BadRequestException("No overload detected");
+     if (totalDemand <= forecast.getAvailableSupplyMW()) {
+    throw new BadRequestException("No overload detected");
+}
 
-        }
 
         Zone targetZone = activeZones.get(activeZones.size() - 1);
         double reduction = totalDemand - forecast.getAvailableSupplyMW();
