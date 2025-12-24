@@ -37,8 +37,8 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
         this.eventRepo = eventRepo;
     }
 
-  @Override
-public boolean triggerLoadShedding(Long forecastId) {
+ @Override
+public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     SupplyForecast forecast = forecastRepo.findById(forecastId)
             .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
@@ -59,7 +59,7 @@ public boolean triggerLoadShedding(Long forecastId) {
         }
     }
 
-    // testTriggerLoadShedding_noOverload_throws
+    // ✅ required by testTriggerLoadShedding_noOverload_throws
     if (totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new BadRequestException("No overload detected");
     }
@@ -75,11 +75,10 @@ public boolean triggerLoadShedding(Long forecastId) {
             .expectedDemandReductionMW(reduction)
             .build();
 
-    eventRepo.save(event);
-
-    // testTriggerLoadShedding_success_createsEvent
-    return true;
+    // ✅ required by testTriggerLoadShedding_success_createsEvent
+    return eventRepo.save(event);
 }
+
 
     @Override
     public LoadSheddingEvent getEventById(Long id) {
