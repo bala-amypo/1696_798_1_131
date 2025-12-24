@@ -29,7 +29,9 @@ public class AppUser {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
-
+ @Transient
+    private String role;
+    
     @Builder.Default
     private Boolean active = true;
 }
