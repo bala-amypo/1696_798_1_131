@@ -14,17 +14,28 @@ public class JwtTokenProvider {
     private static final String SECRET_KEY = "secret-key-demo";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
 
-    public String createToken(AppUser user) {
+   public String createToken(AppUser user) {
 
-        return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("userId", user.getId())
-                .claim("role", user.getRoles().iterator().next().getName())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+    String role = null;
+
+    // 1️⃣ Prefer roles set (real app usage)
+    if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+        role = user.getRoles().iterator().next().getName();
     }
+    // 2️⃣ Fallback for test cases
+    else if (user.getRole() != null) {
+        role = user.getRole();
+    }
+
+    return Jwts.builder()
+            .setSubject(user.getEmail())
+            .claim("userId", user.getId())
+            .claim("role", role)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+            .compact();
+}
 
     public boolean validateToken(String token) {
         try {
