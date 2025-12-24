@@ -38,7 +38,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     }
 
 @Override
-public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
+public boolean triggerLoadShedding(Long forecastId) {
 
     SupplyForecast forecast = forecastRepo.findById(forecastId)
             .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
@@ -52,22 +52,18 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     double totalDemand = 0;
 
     for (Zone zone : activeZones) {
-    Optional<DemandReading> opt =
-            readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
-
-    if (opt.isPresent()) {
-        totalDemand += opt.get().getDemandMW();
+        Optional<DemandReading> opt =
+                readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
+        if (opt.isPresent()) {
+            totalDemand += opt.get().getDemandMW();
+        }
     }
-}
 
-
-    // ✅ REQUIRED BY TEST
     if (totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new IllegalStateException("No overload detected");
     }
 
     Zone targetZone = activeZones.get(activeZones.size() - 1);
-
     double reduction = totalDemand - forecast.getAvailableSupplyMW();
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
@@ -78,7 +74,8 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
             .expectedDemandReductionMW(reduction)
             .build();
 
-    return eventRepo.save(event);
+    eventRepo.save(event);
+    return true;
 }
 
 
