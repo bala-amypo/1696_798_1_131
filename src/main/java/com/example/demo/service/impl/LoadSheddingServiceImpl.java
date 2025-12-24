@@ -61,7 +61,8 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     // testTriggerLoadShedding_noOverload_throws
     if (totalDemand <= forecast.getAvailableSupplyMW()) {
-        throw new BadRequestException("No overload detected");
+       throw new IllegalStateException("No overload detected");
+
     }
 
     Zone targetZone = activeZones.get(activeZones.size() - 1);
