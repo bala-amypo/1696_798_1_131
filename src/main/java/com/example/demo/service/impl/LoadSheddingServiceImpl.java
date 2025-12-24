@@ -22,16 +22,15 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     private final ZoneRepository zoneRepo;
     private final LoadSheddingEventRepository eventRepo;
 
-    // ✅ constructor EXACTLY as tests expect (3 args)
-    public LoadSheddingServiceImpl(
-            SupplyForecastRepository forecastRepo,
-            ZoneRepository zoneRepo,
-            LoadSheddingEventRepository eventRepo) {
+  public LoadSheddingServiceImpl(
+        SupplyForecastRepository forecastRepo,
+        ZoneRepository zoneRepo,
+        LoadSheddingEventRepository eventRepo) {
+    this.forecastRepo = forecastRepo;
+    this.zoneRepo = zoneRepo;
+    this.eventRepo = eventRepo;
+}
 
-        this.forecastRepo = forecastRepo;
-        this.zoneRepo = zoneRepo;
-        this.eventRepo = eventRepo;
-    }
 @Override
 public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
