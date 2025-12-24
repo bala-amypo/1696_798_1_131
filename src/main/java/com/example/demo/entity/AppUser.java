@@ -27,8 +27,9 @@ public class AppUser {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    @Builder.Default
+@ManyToMany(fetch = FetchType.EAGER)
+private Set<Role> roles = new HashSet<>();
  @Transient
     private String role;
     
