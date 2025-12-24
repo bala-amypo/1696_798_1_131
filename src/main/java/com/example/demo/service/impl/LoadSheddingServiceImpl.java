@@ -51,7 +51,7 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     double totalDemand = 0;
 
-    for (Zone zone : activeZones) {
+for (Zone zone : activeZones) {
     Optional<DemandReading> opt =
             readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
 
