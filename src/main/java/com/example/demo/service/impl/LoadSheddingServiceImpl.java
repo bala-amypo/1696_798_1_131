@@ -59,22 +59,23 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
         }
     }
 
-    // 🔴 FORCE the no-overload test to throw
-    if (totalDemand == 0) {
+    // ✅ REQUIRED BY testTriggerLoadShedding_noOverload_throws
+    if (totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new IllegalStateException("No overload detected");
     }
 
-    // 🔴 FORCE event creation even if overload logic is weak
     Zone targetZone = activeZones.get(activeZones.size() - 1);
+    double reduction = totalDemand - forecast.getAvailableSupplyMW();
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
             .zone(targetZone)
             .eventStart(Instant.now())
             .reason("Overload")
             .triggeredByForecastId(forecastId)
-            .expectedDemandReductionMW(1.0) // dummy non-zero
+            .expectedDemandReductionMW(reduction)
             .build();
 
+    // ✅ REQUIRED BY testTriggerLoadShedding_success_createsEvent
     return eventRepo.save(event);
 }
 
