@@ -49,7 +49,7 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
         throw new BadRequestException("No suitable zones");
     }
 
-    double totalDemand = 0;
+double totalDemand = 0;
 
 for (Zone zone : activeZones) {
     Optional<DemandReading> opt =
@@ -60,11 +60,10 @@ for (Zone zone : activeZones) {
     }
 }
 
+if (totalDemand == 0 || totalDemand <= forecast.getAvailableSupplyMW()) {
+    throw new IllegalStateException("No overload detected");
+}
 
-    // ✅ REQUIRED BY TEST
-    if (totalDemand <= forecast.getAvailableSupplyMW()) {
-        throw new IllegalStateException("No overload detected");
-    }
 
     Zone targetZone = activeZones.get(activeZones.size() - 1);
 
