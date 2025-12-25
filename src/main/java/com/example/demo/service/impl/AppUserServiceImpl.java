@@ -55,7 +55,7 @@ public class AppUserServiceImpl implements AppUserService {
                 role
         );
     }
-
+    
     @Override
     public AuthResponse login(String email, String password) {
 
