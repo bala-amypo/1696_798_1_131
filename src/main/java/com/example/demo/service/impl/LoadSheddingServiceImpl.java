@@ -38,7 +38,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     }
 
 @Override
-public boolean triggerLoadShedding(Long forecastId) {
+public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     SupplyForecast forecast = forecastRepo.findById(forecastId)
             .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
@@ -49,24 +49,22 @@ public boolean triggerLoadShedding(Long forecastId) {
         throw new BadRequestException("No suitable zones");
     }
 
-double totalDemand = 0;
+    double totalDemand = 0;
 
-for (Zone zone : activeZones) {
-    Optional<DemandReading> opt =
-            readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
-
-    if (opt.isPresent()) {
-        totalDemand += opt.get().getDemandMW();
+    for (Zone zone : activeZones) {
+        Optional<DemandReading> opt =
+                readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
+        if (opt.isPresent()) {
+            totalDemand += opt.get().getDemandMW();
+        }
     }
-}
 
-
-    if (totalDemand == 0 || totalDemand <= forecast.getAvailableSupplyMW()) {
+    // ✅ REQUIRED BY testTriggerLoadShedding_noOverload_throws
+    if (totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new IllegalStateException("No overload detected");
     }
 
     Zone targetZone = activeZones.get(activeZones.size() - 1);
-
     double reduction = totalDemand - forecast.getAvailableSupplyMW();
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
@@ -77,10 +75,10 @@ for (Zone zone : activeZones) {
             .expectedDemandReductionMW(reduction)
             .build();
 
-    eventRepo.save(event);
-
-    return true;
+    // ✅ REQUIRED BY testTriggerLoadShedding_success_createsEvent
+    return eventRepo.save(event);
 }
+
 
     @Override
     public LoadSheddingEvent getEventById(Long id) {
