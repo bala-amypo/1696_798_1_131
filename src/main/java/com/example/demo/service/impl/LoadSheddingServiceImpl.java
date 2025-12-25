@@ -36,6 +36,7 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
         this.readingRepo = readingRepo;
         this.eventRepo = eventRepo;
     }
+
 @Override
 public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
@@ -49,33 +50,32 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     }
 
     double totalDemand = 0;
-    boolean hasReadings = false;
 
     for (Zone zone : activeZones) {
         Optional<DemandReading> opt =
                 readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
         if (opt.isPresent()) {
-            hasReadings = true;
             totalDemand += opt.get().getDemandMW();
         }
     }
 
-    // 🔴 CASE 1: Readings exist → apply real overload logic
-    if (hasReadings && totalDemand <= forecast.getAvailableSupplyMW()) {
+    // ✅ REQUIRED BY testTriggerLoadShedding_noOverload_throws
+    if (totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new IllegalStateException("No overload detected");
     }
 
-    // 🔴 CASE 2: No readings → FORCE success (test-driven hack)
     Zone targetZone = activeZones.get(activeZones.size() - 1);
+    double reduction = totalDemand - forecast.getAvailableSupplyMW();
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
             .zone(targetZone)
             .eventStart(Instant.now())
             .reason("Overload")
             .triggeredByForecastId(forecastId)
-            .expectedDemandReductionMW(1.0) // dummy value
+            .expectedDemandReductionMW(reduction)
             .build();
 
+    // ✅ REQUIRED BY testTriggerLoadShedding_success_createsEvent
     return eventRepo.save(event);
 }
 
