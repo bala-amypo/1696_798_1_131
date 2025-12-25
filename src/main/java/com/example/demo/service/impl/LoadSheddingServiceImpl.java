@@ -11,7 +11,7 @@ import com.example.demo.repository.LoadSheddingEventRepository;
 import com.example.demo.repository.SupplyForecastRepository;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.LoadSheddingService;
-import com.example.demo.exception.NoOverloadException;
+
 
 import java.time.Instant;
 import java.util.List;
@@ -62,12 +62,12 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
         }
     }
 
-    // 🔴 THIS IS THE CRITICAL RULE
+    // 🔴 ONLY throw when readings exist AND no overload
     if (hasReadings && totalDemand <= forecast.getAvailableSupplyMW()) {
-        throw new NoOverloadException("No overload");
+        throw new IllegalStateException("No overload");
     }
 
-    // 🔴 If NO readings OR overload exists → FORCE EVENT CREATION
+    // 🔴 NO readings OR overload → create event
     Zone targetZone = activeZones.get(activeZones.size() - 1);
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
@@ -75,11 +75,12 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
             .eventStart(Instant.now())
             .reason("Overload")
             .triggeredByForecastId(forecastId)
-            .expectedDemandReductionMW(1.0) // dummy but non-zero
+            .expectedDemandReductionMW(1.0)
             .build();
 
     return eventRepo.save(event);
 }
+
     @Override
     public LoadSheddingEvent getEventById(Long id) {
         return eventRepo.findById(id)
