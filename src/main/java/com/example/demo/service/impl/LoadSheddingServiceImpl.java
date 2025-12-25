@@ -49,12 +49,17 @@ public boolean triggerLoadShedding(Long forecastId) {
         throw new BadRequestException("No suitable zones");
     }
 
-    double totalDemand = 0;
+double totalDemand = 0;
 
-    for (Zone zone : activeZones) {
-        readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId())
-                .ifPresent(r -> totalDemand += r.getDemandMW());
+for (Zone zone : activeZones) {
+    Optional<DemandReading> opt =
+            readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
+
+    if (opt.isPresent()) {
+        totalDemand += opt.get().getDemandMW();
     }
+}
+
 
     if (totalDemand == 0 || totalDemand <= forecast.getAvailableSupplyMW()) {
         throw new IllegalStateException("No overload detected");
