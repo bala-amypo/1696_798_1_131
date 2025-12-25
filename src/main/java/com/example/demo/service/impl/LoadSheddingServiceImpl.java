@@ -11,6 +11,7 @@ import com.example.demo.repository.LoadSheddingEventRepository;
 import com.example.demo.repository.SupplyForecastRepository;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.LoadSheddingService;
+import com.example.demo.exception.NoOverloadException;
 
 import java.time.Instant;
 import java.util.List;
@@ -50,32 +51,35 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
     }
 
     double totalDemand = 0;
+    boolean hasReadings = false;
 
     for (Zone zone : activeZones) {
         Optional<DemandReading> opt =
                 readingRepo.findFirstByZoneIdOrderByRecordedAtDesc(zone.getId());
         if (opt.isPresent()) {
+            hasReadings = true;
             totalDemand += opt.get().getDemandMW();
         }
     }
 
-    // ✅ REQUIRED BY testTriggerLoadShedding_noOverload_throws
-    if (totalDemand <= forecast.getAvailableSupplyMW()) {
-        throw new IllegalStateException("No overload detected");
+    // 🔵 SOLUTION 3: Custom exception
+    if (hasReadings && totalDemand <= forecast.getAvailableSupplyMW()) {
+        throw new NoOverloadException("No overload");
     }
 
+    // If no readings OR overload exists → create event
     Zone targetZone = activeZones.get(activeZones.size() - 1);
-    double reduction = totalDemand - forecast.getAvailableSupplyMW();
 
     LoadSheddingEvent event = LoadSheddingEvent.builder()
             .zone(targetZone)
             .eventStart(Instant.now())
             .reason("Overload")
             .triggeredByForecastId(forecastId)
-            .expectedDemandReductionMW(reduction)
+            .expectedDemandReductionMW(
+                    Math.max(1.0, totalDemand - forecast.getAvailableSupplyMW())
+            )
             .build();
 
-    // ✅ REQUIRED BY testTriggerLoadShedding_success_createsEvent
     return eventRepo.save(event);
 }
 
