@@ -10,3 +10,4 @@ public interface DemandReadingService {
     DemandReading getLatestReading(Long zoneId);
     List<DemandReading> getRecentReadings(Long zoneId, int limit);
 }
+
