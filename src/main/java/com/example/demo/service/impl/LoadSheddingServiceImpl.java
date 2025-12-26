@@ -76,14 +76,17 @@ public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
 
     // 4️⃣ Always create and save event on success
     LoadSheddingEvent event = LoadSheddingEvent.builder()
-            .zone(targetZone)
-            .forecast(forecast)
-            .shedLoadMW(totalDemand - forecast.getAvailableSupplyMW())
-            .build();
+        .zone(targetZone)
+        .eventStart(Instant.now())
+        .triggeredByForecastId(forecast.getId())
+        .expectedDemandReductionMW(
+                totalDemand - forecast.getAvailableSupplyMW()
+        )
+        .build();
 
-    eventRepo.save(event);
+eventRepo.save(event);
+return event;
 
-    return event;
 }
 
     @Override
