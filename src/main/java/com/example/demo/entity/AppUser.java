@@ -30,9 +30,11 @@ public class AppUser {
     private String password;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private Set<Role> roles = new HashSet<>();
-
+@ManyToMany(fetch = FetchType.EAGER)
+private Set<Role> roles = new HashSet<>();
+ @Transient
+    private String role;
+    
     @Builder.Default
     private Boolean active = true;
 }
