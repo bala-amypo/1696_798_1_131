@@ -32,9 +32,4 @@ public class SupplyForecast {
     void onCreate() {
         this.generatedAt = Instant.now();
     }
-
-    // ✅ SAFE ADDITION — does NOT break existing tests
-    public Double getAvailableSupplyMW() {
-        return availableSupplyMW == null ? 0.0 : availableSupplyMW;
-    }
 }
