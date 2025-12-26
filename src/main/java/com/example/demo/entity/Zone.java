@@ -45,4 +45,9 @@ public class Zone {
     void onUpdate() {
         this.updatedAt = Instant.now();
     }
+
+    // ✅ SAFE ADDITION — prevents null Boolean issues in stream/filter
+    public Boolean getActive() {
+        return active != null ? active : false;
+    }
 }
