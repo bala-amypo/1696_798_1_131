@@ -1,87 +1,82 @@
-package com.example.demo.entity;
-
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+package com.example.demo.dto;
 
 import java.time.Instant;
 
-@Entity
-@Table(name = "zones")
-public class Zone {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ZoneDTO {
     private Long id;
-
-    @Column(unique = true, nullable = false)
     private String zoneName;
-
-    @Column(nullable = false)
     private Integer priorityLevel;
-
     private Integer population;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    @CreationTimestamp
+    private Boolean active;
     private Instant createdAt;
-
-    @UpdateTimestamp
     private Instant updatedAt;
 
-    public Zone() {}
+    public ZoneDTO() {}
 
-    public Zone(String zoneName, Integer priorityLevel, Integer population, Boolean active) {
+    public ZoneDTO(Long id, String zoneName, Integer priorityLevel, Integer population, Boolean active, Instant createdAt, Instant updatedAt) {
+        this.id = id;
         this.zoneName = zoneName;
         this.priorityLevel = priorityLevel;
         this.population = population;
-        this.active = active != null ? active : true;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public static ZoneBuilder builder() {
-        return new ZoneBuilder();
+    public static ZoneDTOBuilder builder() {
+        return new ZoneDTOBuilder();
     }
 
-    public static class ZoneBuilder {
+    public static class ZoneDTOBuilder {
         private Long id;
         private String zoneName;
         private Integer priorityLevel;
         private Integer population;
-        private Boolean active = true;
+        private Boolean active;
+        private Instant createdAt;
+        private Instant updatedAt;
 
-        public ZoneBuilder id(Long id) {
+        public ZoneDTOBuilder id(Long id) {
             this.id = id;
             return this;
         }
 
-        public ZoneBuilder zoneName(String zoneName) {
+        public ZoneDTOBuilder zoneName(String zoneName) {
             this.zoneName = zoneName;
             return this;
         }
 
-        public ZoneBuilder priorityLevel(Integer priorityLevel) {
+        public ZoneDTOBuilder priorityLevel(Integer priorityLevel) {
             this.priorityLevel = priorityLevel;
             return this;
         }
 
-        public ZoneBuilder population(Integer population) {
+        public ZoneDTOBuilder population(Integer population) {
             this.population = population;
             return this;
         }
 
-        public ZoneBuilder active(Boolean active) {
+        public ZoneDTOBuilder active(Boolean active) {
             this.active = active;
             return this;
         }
 
-        public Zone build() {
-            Zone zone = new Zone(zoneName, priorityLevel, population, active);
-            zone.setId(id);
-            return zone;
+        public ZoneDTOBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public ZoneDTOBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public ZoneDTO build() {
+            return new ZoneDTO(id, zoneName, priorityLevel, population, active, createdAt, updatedAt);
         }
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
