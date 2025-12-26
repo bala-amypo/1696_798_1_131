@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.AppUser;
-import com.example.demo.entity.Role;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
@@ -10,70 +9,73 @@ import com.example.demo.service.AppUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
-@Service   
+@Service
 public class AppUserServiceImpl implements AppUserService {
-
-    private final AppUserRepository userRepo;
-    private final PasswordEncoder encoder;
-    private final JwtTokenProvider tokenProvider;
-
-    public AppUserServiceImpl(
-            AppUserRepository userRepo,
-            PasswordEncoder encoder,
-            JwtTokenProvider tokenProvider) {
-        this.userRepo = userRepo;
-        this.encoder = encoder;
-        this.tokenProvider = tokenProvider;
+    
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    
+    public AppUserServiceImpl(AppUserRepository appUserRepository, 
+                              PasswordEncoder passwordEncoder,
+                              JwtTokenProvider jwtTokenProvider) {
+        this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
-    public AuthResponse register(String email, String password, String role) {
-
-        userRepo.findByEmail(email).ifPresent(u -> {
-            throw new BadRequestException("email must be unique");
-        });
-
-        Role r = Role.builder().name(role).build();
-
+    public AppUser register(String email, String password, String role) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new BadRequestException("Email cannot be null or empty");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new BadRequestException("Password cannot be null or empty");
+        }
+        if (role == null || role.trim().isEmpty()) {
+            throw new BadRequestException("Role cannot be null or empty");
+        }
+        
+        if (appUserRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException("Email must be unique");
+        }
+        
         AppUser user = AppUser.builder()
-                .email(email)
-                .password(encoder.encode(password))
-                .roles(Set.of(r))
+                .email(email.trim())
+                .password(passwordEncoder.encode(password))
+                .role(role.trim())
                 .active(true)
                 .build();
-
-        user = userRepo.save(user);
-
-        String token = tokenProvider.createToken(user);
-
-        return new AuthResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                role
-        );
+        
+        return appUserRepository.save(user);
     }
-    
+
     @Override
     public AuthResponse login(String email, String password) {
-
-        AppUser user = userRepo.findByEmail(email)
+        if (email == null || email.trim().isEmpty()) {
+            throw new BadRequestException("Email cannot be null or empty");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new BadRequestException("Password cannot be null or empty");
+        }
+        
+        AppUser user = appUserRepository.findByEmail(email.trim())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
-
-        if (!encoder.matches(password, user.getPassword())) {
+        
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadRequestException("Invalid credentials");
         }
-
-        String role = user.getRoles().iterator().next().getName();
-        String token = tokenProvider.createToken(user);
-
-        return new AuthResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                role
-        );
+        
+        String token = jwtTokenProvider.createToken(user);
+        if (token == null || token.trim().isEmpty()) {
+            throw new RuntimeException("Failed to generate token");
+        }
+        
+        return AuthResponse.builder()
+                .token(token)
+                .userId(user.getId())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
     }
 }
